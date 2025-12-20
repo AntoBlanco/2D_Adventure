@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import tile.TileManager;
 
 import javax.swing.JPanel;
 import java.awt.*;
@@ -10,22 +11,18 @@ public class GamePanel extends JPanel implements Runnable{
     final int scale = 3;
 
     public final int tileSize = originalTileSize * scale; // 48x48 tile, size real on screen
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
-    final int screenWidth = tileSize * maxScreenCol; // 768 pixels
-    final int screenHeight = tileSize * maxScreenRow; // 576 pixels
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 12;
+    public final int screenWidth = tileSize * maxScreenCol; // 768 pixels
+    public final int screenHeight = tileSize * maxScreenRow; // 576 pixels
 
     //FPS
     final int FPS = 60;
 
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
+    TileManager tileManager = new TileManager(this);
     Player player = new Player(this,keyHandler);
-
-    // Set player's default position
-    private int playerX = (screenWidth/2)-(tileSize/2);
-    private int playerY = (screenHeight/2)-(tileSize/2);
-    private int playerSpeed = 4;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
@@ -65,6 +62,7 @@ public class GamePanel extends JPanel implements Runnable{
     }*/
     @Override
     public void run(){
+        spawn();
         // METODO Delta/Acumulador
         double drawInterval = (double) 1000000000 / FPS; // 0.01666 Seconds
         double delta = 0;
@@ -103,7 +101,13 @@ public class GamePanel extends JPanel implements Runnable{
     public void paintComponent(Graphics graphics){
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
+        tileManager.draw(graphics2D);
         player.draw(graphics2D);
         graphics2D.dispose();
+    }
+
+    public void spawn(){
+        // Set player's default position
+        player.setDefaultValues((screenWidth/2)-(tileSize/2),(screenHeight/2)-(tileSize/2),4);
     }
 }

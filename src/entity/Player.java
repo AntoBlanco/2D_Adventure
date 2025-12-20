@@ -28,6 +28,13 @@ public class Player extends Entity{
         nowDirection = Direction.DOWN;
     }
 
+    public void setDefaultValues(int x, int y, int speed){
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        nowDirection = Direction.DOWN;
+    }
+
     public void getPlayerImage(){
         try{
             up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_up_1.png")));
